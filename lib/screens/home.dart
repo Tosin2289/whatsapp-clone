@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/providers.dart';
+import 'list_chat_screens.dart';
 import 'select_person_to_chatpage.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -76,7 +77,7 @@ class _HomeState extends ConsumerState<Home>
         controller: _tabController,
         children: <Widget>[
           const OtherTab(tabName: "Camera"),
-          Container(), // Todo, change to list of chats
+          ListChatScreen(), // Todo, change to list of chats
           const OtherTab(tabName: "Status"),
           const OtherTab(tabName: "Calls"),
         ],
