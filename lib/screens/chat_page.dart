@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../models/chat.dart';
 import '../models/message.dart';
 import '../providers/providers.dart';
@@ -16,9 +15,60 @@ class ChatPage extends ConsumerStatefulWidget {
 class _ChatPageState extends ConsumerState<ChatPage>
     with SingleTickerProviderStateMixin {
   final _textMessageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final myUid = ref.read(firebaseAuthProvider).currentUser!.uid;
+    Widget myChatBubble(Message message) {
+      return Container(
+        padding: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.only(
+            left: 50.0, right: 15.0, top: 7.0, bottom: 7.0),
+        decoration: BoxDecoration(
+          color: const Color(0xffE2FDC4),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 5),
+              color: Colors.grey.withOpacity(.1),
+              blurRadius: 5.0,
+              spreadRadius: 1.0,
+            ),
+          ],
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            bottomLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          ),
+        ),
+        child: Text(message.text),
+      );
+    }
+
+    Widget otherChatBubble(Message message) {
+      return Container(
+        padding: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.only(
+            left: 15.0, right: 50.0, top: 7.0, bottom: 7.0),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 5),
+              color: Colors.grey.withOpacity(.1),
+              blurRadius: 5.0,
+              spreadRadius: 1.0,
+            ),
+          ],
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(10.0),
+            bottomRight: Radius.circular(10.0),
+            topLeft: Radius.circular(10.0),
+          ),
+        ),
+        child: Text(message.text),
+      );
+    }
+
     Widget sendMessageField() {
       return Container(
         margin: const EdgeInsets.only(bottom: 30, left: 4, right: 4),
@@ -154,6 +204,42 @@ class _ChatPageState extends ConsumerState<ChatPage>
             ),
             Column(
               children: [
+                Expanded(
+                    child: StreamBuilder<List<Message>>(
+                        stream: ref
+                            .read(databaseProvider)!
+                            .getMessages(widget.chat.chatId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.active &&
+                              snapshot.hasData) {
+                            final messages = snapshot.data ?? [];
+
+                            return ListView.builder(
+                              reverse: true,
+                              itemCount: messages.length,
+                              itemBuilder: (_, index) {
+                                final message = messages[index];
+                                final isMe = message.myUid ==
+                                    ref
+                                        .read(firebaseAuthProvider)
+                                        .currentUser!
+                                        .uid;
+                                if (isMe) {
+                                  return Align(
+                                      alignment: Alignment.centerRight,
+                                      child: myChatBubble(message));
+                                } else {
+                                  return Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: otherChatBubble(message));
+                                }
+                              },
+                            );
+                          } else {
+                            return Container();
+                          }
+                        })),
                 sendMessageField(),
               ],
             ),
