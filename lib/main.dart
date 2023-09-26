@@ -1,6 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:whatsapp_clone/screens/home.dart';
+import 'package:whatsapp_clone/screens/sign_up_login.dart';
 
+import 'auth/auth_widget.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -8,7 +12,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,9 +21,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Whazzap Clone',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(
+          0xff075E54,
+        )),
+      ),
+      home: AuthWidget(
+        signedInBuilder: (context) => const Home(),
+        nonSignedInBuilder: (context) => const SignUpLogIn(),
       ),
     );
   }
