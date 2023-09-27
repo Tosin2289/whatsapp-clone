@@ -99,16 +99,3 @@ class _HomeState extends ConsumerState<Home>
     );
   }
 }
-
-// TODO: to implement
-class OtherTab extends StatelessWidget {
-  final String tabName;
-  const OtherTab({required this.tabName, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(tabName),
-    );
-  }
-}
