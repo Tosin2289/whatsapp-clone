@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/chat.dart';
-import '../models/message.dart';
-import '../providers/providers.dart';
+import '../../models/chat.dart';
+import '../../models/message.dart';
+import '../../providers/providers.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   final Chat chat;

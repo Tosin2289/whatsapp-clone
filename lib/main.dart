@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/screens/home.dart';
-import 'package:whatsapp_clone/screens/sign_up_login.dart';
+import 'package:whatsapp_clone/screens/auth/sign_up_login.dart';
 
 import 'auth/auth_widget.dart';
 import 'firebase_options.dart';

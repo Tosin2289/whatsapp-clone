@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/providers.dart';
+import '../../providers/providers.dart';
 
 class SignUpLogIn extends ConsumerWidget {
   const SignUpLogIn({Key? key}) : super(key: key);

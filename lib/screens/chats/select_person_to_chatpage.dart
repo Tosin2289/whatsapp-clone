@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/models/user_data.dart';
 
-import '../models/chat.dart';
-import '../providers/providers.dart';
+import '../../models/chat.dart';
+import '../../providers/providers.dart';
 import 'chat_page.dart';
 
 class SelectPersonToChat extends ConsumerWidget {
