@@ -49,7 +49,7 @@ class _CameraPageState extends State<CameraPage> {
           padding: const EdgeInsets.all(8.0),
           child: Center(
               child: SizedBox(
-            height: 400,
+            height: 800,
             width: 400,
             child: CameraPreview(controller),
           )),
