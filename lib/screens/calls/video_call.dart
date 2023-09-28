@@ -24,26 +24,29 @@ class VideoCall extends ConsumerStatefulWidget {
 }
 
 class _VideoCallState extends ConsumerState<VideoCall> {
+  int? _remoteUid;
   bool _localUserJoined = false;
-  int? remoteUid;
   late RtcEngine _engine;
+
   final myUid = FirebaseAuth.instance.currentUser!.uid;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initForAgora();
+    initAgora();
   }
 
-  Future<void> initForAgora() async {
-    // retrive permission
+  Future<void> initAgora() async {
+    // retrieve permissions
     await [Permission.microphone, Permission.camera].request();
+
     //create the engine
     _engine = createAgoraRtcEngine();
     await _engine.initialize(const RtcEngineContext(
       appId: appID,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
+
     _engine.registerEventHandler(
       RtcEngineEventHandler(
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
@@ -55,14 +58,14 @@ class _VideoCallState extends ConsumerState<VideoCall> {
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           debugPrint("remote user $remoteUid joined");
           setState(() {
-            remoteUid = remoteUid;
+            _remoteUid = remoteUid;
           });
         },
         onUserOffline: (RtcConnection connection, int remoteUid,
             UserOfflineReasonType reason) {
           debugPrint("remote user $remoteUid left channel");
           setState(() {
-            remoteUid = 0;
+            _remoteUid = null;
           });
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
@@ -71,6 +74,7 @@ class _VideoCallState extends ConsumerState<VideoCall> {
         },
       ),
     );
+
     await _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
     await _engine.enableVideo();
     await _engine.startPreview();
@@ -104,7 +108,7 @@ class _VideoCallState extends ConsumerState<VideoCall> {
                     ? AgoraVideoView(
                         controller: VideoViewController(
                           rtcEngine: _engine,
-                          canvas: VideoCanvas(uid: remoteUid),
+                          canvas: VideoCanvas(uid: 0),
                         ),
                       )
                     : const CircularProgressIndicator(),
@@ -117,7 +121,7 @@ class _VideoCallState extends ConsumerState<VideoCall> {
   }
 
   Widget remoteVideo() {
-    if (remoteUid != null) {
+    if (_remoteUid != null) {
       return AgoraVideoView(
         controller: VideoViewController.remote(
           rtcEngine: _engine,
