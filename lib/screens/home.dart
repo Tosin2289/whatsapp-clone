@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/screens/calls/calls_page.dart';
 import '../providers/providers.dart';
-import 'camera/camera_page.dart';
+import 'camera/dialog.dart';
 import 'chats/list_chat_screens.dart';
 import 'chats/select_person_to_chatpage.dart';
 import 'status/status_page.dart';
@@ -79,7 +79,7 @@ class _HomeState extends ConsumerState<Home>
       body: TabBarView(
         controller: _tabController,
         children: const <Widget>[
-          CameraPage(),
+          DialogComponet(),
           ListChatScreen(), // Todo, change to list of chats
           StatusPage(),
           CallsPage(),
